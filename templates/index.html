@@ -83,13 +83,18 @@
             }
         }
 
-        function agregarOperador(op) {
-            if (pantalla.value !== '') {
-                numero1 = pantalla.value;
-                operador = op;
-                pantalla.value += ' ' + op + ' ';
-            }
+function agregarOperador(op) {
+    if (pantalla.value !== '') {
+        // Verificar que el último carácter no sea ya un operador
+        const ultimoCaracter = pantalla.value.slice(-1);
+        if (['+', '-', '*', '/'].includes(ultimoCaracter)) {
+            // Reemplazar el último operador
+            pantalla.value = pantalla.value.slice(0, -1) + op;
+        } else {
+            pantalla.value += ' ' + op + ' ';
         }
+    }
+}
 
         function limpiarPantalla() {
             pantalla.value = '';
@@ -100,12 +105,27 @@
             expresionInput.value = '';
         }
 
-        function calcularExpresion() {
-            if (pantalla.value === '') return;
-            
-            const expresion = pantalla.value;
-            enviarCalculo('expresion', '', '', expresion);
+function calcularExpresion() {
+    if (pantalla.value === '') return;
+
+    const expresion = pantalla.value;
+    
+    try {
+        // Validar expresión segura
+        if (/[^0-9+\-*/(). ]/.test(expresion)) {
+            throw new Error("Caracteres no permitidos");
         }
+        
+        // Evaluar la expresión
+        const resultado = eval(expresion);
+        resultadoDiv.textContent = `Resultado: ${resultado}`;
+        resultadoDiv.className = 'exito';
+    } catch (error) {
+        resultadoDiv.textContent = `Error: ${error.message}`;
+        resultadoDiv.className = 'error';
+    }
+}
+
 
         function evaluarExpresion() {
             const expresion = expresionInput.value;

@@ -108,6 +108,7 @@ class ManejadorCalculadora(http.server.SimpleHTTPRequestHandler):
             }
             self.enviar_respuesta_json(400, respuesta)
     
+   
     def ejecutar_operacion(self, operacion, numero1, numero2, expresion):
         """Ejecuta la operación matemática solicitada."""
         if operacion == 'expresion':
@@ -116,16 +117,17 @@ class ManejadorCalculadora(http.server.SimpleHTTPRequestHandler):
             return Calculadora.raiz_cuadrada(numero1)
         elif operacion == 'porcentaje':
             return Calculadora.porcentaje(numero1, numero2)
+        elif operacion == 'potencia':
+            return Calculadora.potencia(numero1, numero2)
         else:
             # Operaciones binarias básicas
             operaciones = {
                 'suma': Calculadora.suma,
                 'resta': Calculadora.resta,
                 'multiplicacion': Calculadora.multiplicacion,
-                'division': Calculadora.division,
-                'potencia': Calculadora.potencia
+                'division': Calculadora.division
             }
-            
+
             if operacion in operaciones:
                 return operaciones[operacion](numero1, numero2)
             else:
